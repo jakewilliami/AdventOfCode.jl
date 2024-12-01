@@ -1,0 +1,13 @@
+name = "AdventOfCode"
+uuid = "87baba0c-5a65-4ce1-94bc-b8e34952da9f"
+authors = ["Jake Ireland <jakewilliami@icloud.com> and contributors"]
+version = "1.0.0-DEV"
+
+[compat]
+julia = "1.6.7"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
