@@ -1,8 +1,10 @@
 # AdventOfCode.jl
 
+[![Build Status](https://github.com/jakewilliami/AdventOfCode.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/jakewilliami/AdventOfCode.jl/actions/workflows/CI.yml?query=branch%3Amaster)
+
 Common helper functions used in various Advent of Code solutions.
 
-To add this to a day's solution, create a project and add the module [as described here](https://discourse.julialang.org/t/26358/2).
+To add this to a day's solution, create a project and add the module [as described here](https://stackoverflow.com/a/65985105).
 
 ## Library Documentation
 
