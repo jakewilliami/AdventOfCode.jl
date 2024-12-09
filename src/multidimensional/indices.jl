@@ -4,7 +4,8 @@ export CartesianIndicesRowWise
 # NOTE: use CartesianIndices or eachindex when you can, as RowWise will be slower.  Should only use for convenience
 # Resource:
 #   https://github.com/JuliaLang/julia/blob/84cfe04e/base/multidimensional.jl#L267-L269
-struct CartesianIndicesRowWise{N, R <: NTuple{N, OrdinalRange{Int, Int}}} <: AbstractArray{CartesianIndex{N}, N}
+struct CartesianIndicesRowWise{N, R <: NTuple{N, OrdinalRange{Int, Int}}} <:
+       AbstractArray{CartesianIndex{N}, N}
     inner::CartesianIndices{N, R}
 end
 
@@ -19,7 +20,7 @@ _xform_index(i::Base.OneTo) = i.stop
 function Base.show(io::IO, iter::CartesianIndicesRowWise)
     print(io, "CartesianIndicesRowWise(")
     show(io, map(_xform_index, iter.inner.indices))
-    print(io, ")")
+    return print(io, ")")
 end
 Base.show(io::IO, ::MIME"text/plain", iter::CartesianIndicesRowWise) = show(io, iter)
 
@@ -34,7 +35,7 @@ Base.length(iter::CartesianIndicesRowWise) = length(iter.inner)
 Base.getindex(iter::CartesianIndicesRowWise, i) = getindex(iter.inner, i)
 Base.step(iter::CartesianIndicesRowWise) = step(iter.inner)
 Base.first(iter::CartesianIndicesRowWise) = first(iter.inner)
-Base.last(iter::CartesianIndicesRowWise)  = last(iter.inner)
+Base.last(iter::CartesianIndicesRowWise) = last(iter.inner)
 Base.ndims(R::CartesianIndicesRowWise) = ndims(R.inner)
 
 # Custom row-wise iteration!
@@ -66,7 +67,12 @@ function __inc(state::Tuple{Int}, indices::Tuple{OrdinalRange{Int, Int}})
     valid = col != ncols
     return valid, (I,)
 end
-function __inc(state::Tuple{Int, Int, Vararg{Int}}, indices::Tuple{OrdinalRange{Int, Int}, OrdinalRange{Int, Int}, Vararg{OrdinalRange{Int, Int}}})
+function __inc(
+    state::Tuple{Int, Int, Vararg{Int}},
+    indices::Tuple{
+        OrdinalRange{Int, Int}, OrdinalRange{Int, Int}, Vararg{OrdinalRange{Int, Int}}
+    },
+)
     cols = last(indices)
     ncols = last(cols)
     col = last(state)

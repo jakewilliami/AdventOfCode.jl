@@ -3,7 +3,6 @@ module Parsing
 export get_integers
 export readlines_into_char_matrix, readlines_into_int_matrix
 
-
 # Integers
 
 # Will return a list of pairs integers and their respective index ranges within the string.
@@ -43,18 +42,15 @@ function _get_integers_with_ranges(s::S) where {S <: AbstractString}
     return integers
 end
 
-
 function _get_integers(s::S) where {S <: AbstractString}
     integers = _get_integers_with_ranges(s)
     return Int[i for (i, _) in integers]
 end
 
-
 # Characters preceeding a number that may indicate said number is negative
 # https://www.wikiwand.com/en/Plus_and_minus_signs#Character_codes
 # hyphen, minus, en dash, small hyphen, full width hyphen, em dash
 const _MINUS_CHARS = ('-', '−', '–', '﹣', '－', '—')
-
 
 function _get_integers_with_negatives(s::S) where {S <: AbstractString}
     iₛ = firstindex(s)
@@ -69,7 +65,6 @@ function _get_integers_with_negatives(s::S) where {S <: AbstractString}
     end
     return integers_with_negatives
 end
-
 
 """
 ```julia
@@ -90,14 +85,14 @@ julia> get_integers("Sensor at x=3938443, y=-271482: closest beacon is at x=4081
  1177185
 ```
 """
-get_integers(s::S; negatives::Bool = false) where {S <: AbstractString} = (negatives ? _get_integers_with_negatives : _get_integers)(s)
-
+get_integers(s::S; negatives::Bool = false) where {S <: AbstractString} =
+    (negatives ? _get_integers_with_negatives : _get_integers)(s)
 
 # Matrices
 
-_lines_into_matrix(lines, f::Function = identity) =
-    reduce(vcat, permutedims(f.(collect(s))) for s in lines if !isempty(strip(s)))
-
+function _lines_into_matrix(lines, f::Function = identity)
+    return reduce(vcat, permutedims(f.(collect(s))) for s in lines if !isempty(strip(s)))
+end
 
 """
 ```julia
@@ -122,7 +117,6 @@ This function will produce the matrix
 See also: [`readlines_into_int_matrix`](@ref).
 """
 readlines_into_char_matrix(file::String) = _lines_into_matrix(eachline(file))
-
 
 """
 ```julia

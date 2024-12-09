@@ -3,8 +3,8 @@ include("n_adjacencies.jl")
 export areadjacent
 export cardinal_adjacencies, orthogonal_adjacencies, cartesian_adjacencies
 export adjacent_cardinal_indices, adjacent_orthogonal_indices, adjacent_cartesian_indices
-export cardinal_adjacencies_with_indices, orthogonal_adjacencies_with_indices, cartesian_adjacencies_with_indices
-
+export cardinal_adjacencies_with_indices,
+    orthogonal_adjacencies_with_indices, cartesian_adjacencies_with_indices
 
 """
 ```julia
@@ -16,18 +16,25 @@ Are `i` and `j` adjacent in n-dimensional Cartesian space?
 areadjacent(i::CartesianIndex{N}, j::CartesianIndex{N}) where {N} =
     !any(>(1), map(abs, Tuple(i - j)))
 
+function _adjacent_indices(i::CartesianIndex{N}, dir_fn::Function) where {N}
+    return CartesianIndex{N}[i + d for d in dir_fn(N)]
+end
+function _adjacent_indices(
+    M::AbstractArray{T}, i::CartesianIndex{N}, dir_fn::Function
+) where {T, N}
+    return CartesianIndex{N}[j for j in _adjacent_indices(i, dir_fn) if hasindex(M, j)]
+end
 
-_adjacent_indices(i::CartesianIndex{N}, dir_fn::Function) where {N} =
-    CartesianIndex{N}[i + d for d in dir_fn(N)]
-_adjacent_indices(M::AbstractArray{T}, i::CartesianIndex{N}, dir_fn::Function) where {T, N} =
-    CartesianIndex{N}[j for j in _adjacent_indices(i, dir_fn) if hasindex(M, j)]
-
-
-_adjacencies_with_indices(M::AbstractArray{T}, i::CartesianIndex{N}, dir_fn::Function) where {T, N} =
-    Tuple{CartesianIndex{N}, T}[(j, M[j]) for j in _adjacent_indices(M, i, dir_fn)]
-_adjacencies(M::AbstractArray{T}, i::CartesianIndex{N}, dir_fn::Function) where {T, N} =
-    T[x for (_i, x) in _adjacencies_with_indices(M, i, dir_fn)]
-
+function _adjacencies_with_indices(
+    M::AbstractArray{T}, i::CartesianIndex{N}, dir_fn::Function
+) where {T, N}
+    return Tuple{CartesianIndex{N}, T}[(j, M[j]) for j in _adjacent_indices(M, i, dir_fn)]
+end
+function _adjacencies(
+    M::AbstractArray{T}, i::CartesianIndex{N}, dir_fn::Function
+) where {T, N}
+    return T[x for (_i, x) in _adjacencies_with_indices(M, i, dir_fn)]
+end
 
 """
 ```julia
@@ -43,7 +50,6 @@ adjacent_cardinal_indices(M::AbstractArray{T}, i::CartesianIndex{N}) where {T, N
     _adjacent_indices(M, i, cardinal_directions)
 const adjacent_orthogonal_indices = adjacent_cardinal_indices
 
-
 """
 ```julia
 cardinal_adjacencies_with_indices(M::AbstractArray{T}, i::CartesianIndex{N}) -> Vector{Tuple{CartesianIndex{N}, T}}
@@ -57,7 +63,6 @@ See also: [`cardinal_adjacencies`](@ref) and [`cartesian_adjacencies`](@ref).
 cardinal_adjacencies_with_indices(M::AbstractArray{T}, i::CartesianIndex{N}) where {T, N} =
     _adjacencies_with_indices(M, i, cardinal_directions)
 const orthogonal_adjacencies_with_indices = cardinal_adjacencies_with_indices
-
 
 """
 ```julia
@@ -73,7 +78,6 @@ cardinal_adjacencies(M::AbstractArray{T}, i::CartesianIndex{N}) where {T, N} =
     _adjacencies(M, i, cardinal_directions)
 const orthogonal_adjacencies = cardinal_adjacencies
 
-
 """
 ```julia
 adjacent_cartesian_indices(M::AbstractArray{T}, i::CartesianIndex{N}) -> Vector{CartesianIndex{N}}
@@ -86,7 +90,6 @@ See also: [`cartesian_adjacencies`](@ref), [`cartesian_adjacencies_with_indices`
 adjacent_cartesian_indices(M::AbstractArray{T}, i::CartesianIndex{N}) where {T, N} =
     _adjacent_indices(M, i, cartesian_directions)
 
-
 """
 ```julia
 cartesian_adjacencies_with_indices(M::AbstractArray{T}, i::CartesianIndex{N}) -> Vector{Tuple{CartesianIndex{N}, T}}
@@ -98,7 +101,6 @@ See also: [`cartesian_adjacencies`](@ref) and [`cartesian_adjacencies`](@ref).
 """
 cartesian_adjacencies_with_indices(M::AbstractArray{T}, i::CartesianIndex{N}) where {T, N} =
     _adjacencies_with_indices(M, i, cartesian_directions)
-
 
 """
 ```julia

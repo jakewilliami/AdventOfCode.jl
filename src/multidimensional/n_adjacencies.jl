@@ -11,7 +11,6 @@ See also: [`n_adjacencies`](@ref) and [`n_faces`](@ref).
 """
 n_cardinal_adjacencies(n::I) where {I <: Integer} = 2n
 
-
 """
 ```julia
 n_faces(n::Integer) -> Integer
@@ -22,7 +21,6 @@ The number of faces of a structure for a given ℝⁿ.
 See also: [`n_cardinal_adjacencies`](@ref).
 """
 n_faces(n::I) where {I <: Integer} = n_cardinal_adjacencies(n)
-
 
 """
 ```julia
