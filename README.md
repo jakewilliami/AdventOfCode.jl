@@ -20,20 +20,35 @@ Modules I have written that are nested within the `AdventOfCode` module to help 
 
 ### Multidimensional
 
-#### Origin
+#### Cartesian
 
-  - `origin(n::Integer) -> CartesianIndex{n}`: the origin in ℝⁿ (can also use `𝟘`).
+  - `origin(n::Integer) -> CartesianIndex{N}`: the origin in ℝⁿ (can also use `𝟘`; `\bbzero<tab>`).
+  - `abs(i::CartesianIndex{N}) -> CartesianIndex{N}`: take the absolute value of each component of the Cartesian index and return a new `CartesianIndex` with only positive components.
 
 #### Indexing
 
   - `hasindex(M::AbstractArray{T}, i::CartesianIndex{N}) -> bool`: does the array have the specified index?
   - `tryindex(M::AbstractArray{T}, i::CartesianIndex{N}) -> Union{T, Nothing}`: gets the element of the array at a specified index, or nothing if it doesn't have that index.
 
+#### Indices
+
+  - `CartesianIndicesRowWise(::AbstractArray)`: iterate row-wise over the cartesian indices of the array.
+
 #### Directions
 
+  - `Direction{N}`: convenient type alias for `CartesianIndex{N}`.
   - `direction(i::CartesianIndex{N}) -> CartesianIndex{N}`: get the Cartesian direction offset of the specified index; e.g., `(-3, 3)` has the `(-1, 1)` direction.
+  - `is_direction(i::CartesianIndex{N}) -> bool`: test whether a vector is a unit direction (e.g., `(-1, 1)` is a direction but `(-3, 3)` is not).
+  - `opposite_direction(i::CartesianIndex{N}) -> CartesianIndex{N}`: get the direction vector that directly opposes the given one.
+  - `rotl90`, `rotr90`, and `rot180`: additional (`Base`-extended) functions to rotate direction vectors by various angles.
   - `cardinal_directions(dim::I; include_origin::Bool = false) -> Vector{CartesianIndex}`: Find all direction offsets in the specified dimension (can also use `orthogonal_directions`).
   - `cartesian_directions(dim::I; include_origin::Bool = false) -> Vector{CartesianIndex}`: Find all direction offsets (including diagonal) in the specified dimension.
+  - Direction constants:
+    - `INDEX_LEFT`, `INDEX_RIGHT`, `INDEX_ABOVE`, `INDEX_BELOW`
+    - `INDEX_WEST`, `INDEX_EAST`, `INDEX_NORTH`, `INDEX_SOUTH`
+    - `INDEX_UP`, `INDEX_DOWN`
+    - `INDEX_TOP_LEFT`, `INDEX_TOP_RIGHT`, `INDEX_BOTTOM_LEFT`, `INDEX_BOTTOM_RIGHT`
+    - `INDEX_NORTH_WEST`, `INDEX_NORTH_EAST`, `INDEX_SOUTH_WEST`, `INDEX_SOUTH_EAST`
 
 #### Adjacencies
 
@@ -51,9 +66,6 @@ Modules I have written that are nested within the `AdventOfCode` module to help 
   - Adjacent elements with indices:
     - `cardinal_adjacencies_with_indices(M::AbstractArray{T}, i::CartesianIndex{N}) -> Vector{Tuple{CartesianIndex{N}, T}}`: the cardinally adjacent elements and indices to the specified index within the array (can also use `orthogonal_adjacencies_with_indices`).
     - `cartesian_adjacencies_with_indices(M::AbstractArray{T}, i::CartesianIndex{N}) -> Vector{Tuple{CartesianIndices{N}, T}}`: the adjacent elements and indices (including diaginally) to the specified index within the array.
-  - Direction constants:
-    - `INDEX_LEFT`, `INDEX_RIGHT`, `INDEX_ABOVE`, `INDEX_BELOW`
-    - `INDEX_TOP_LEFT`, `INDEX_TOP_RIGHT`, `INDEX_BOTTOM_LEFT`, `INDEX_BOTTOM_RIGHT`
 
 ## Other
 

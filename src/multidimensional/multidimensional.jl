@@ -1,7 +1,6 @@
 module Multidimensional
 
-include("index.jl")
-include("origin.jl")
+include("cartesian.jl")
 include("indexing.jl")
 include("indices.jl")
 include("directions.jl")

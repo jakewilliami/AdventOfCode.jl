@@ -9,10 +9,12 @@ using Test
         M3 = zeros(Int, 3, 3)
         M3[1, 2] = 69
 
-        @testset "AdventOfCode.jl/Multidimensional/Origin" begin
+        @testset "AdventOfCode.jl/Multidimensional/Cartesian" begin
             @test 𝟘(2) == CartesianIndex(0, 0)
             @test 𝟘(3) == CartesianIndex(0, 0, 0)
             @test 𝟘(4) == CartesianIndex{4}() - CartesianIndex{4}()
+            @test abs(CartesianIndex(0, 2)) == CartesianIndex(0, 2)
+            @test abs(CartesianIndex(-1, 2, -3, 4, -5)) == CartesianIndex(1, 2, 3, 4, 5)
         end
 
         @testset "AdventOfCode.jl/Multidimensional/Indexing" begin
@@ -38,6 +40,7 @@ using Test
         end
 
         @testset "AdventOfCode.jl/Multidimensional/Directions" begin
+            @test typeof(INDEX_RIGHT) == Direction{2}
             @test INDEX_RIGHT == CartesianIndex(0, 1)
             @test INDEX_LEFT == CartesianIndex(0, -1)
             @test INDEX_UP == CartesianIndex(-1, 0)

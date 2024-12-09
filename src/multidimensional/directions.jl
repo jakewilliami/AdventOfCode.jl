@@ -19,7 +19,7 @@ const INDEX_TOP_RIGHT = INDEX_NORTH_EAST = INDEX_ABOVE + INDEX_RIGHT
 const INDEX_BOTTOM_LEFT = INDEX_SOUTH_WEST = INDEX_BELOW + INDEX_LEFT
 const INDEX_BOTTOM_RIGHT = INDEX_SOUTH_EAST = INDEX_BELOW + INDEX_RIGHT
 
-const Direction{N} = CartesianIndex{N}
+const Direction{N} = CartesianIndex{N} where {N}
 
 """
 ```julia
